@@ -1,0 +1,15 @@
+{
+    "name": "mateu/guzzlecache",
+    "autoload": {
+        "psr-4": {
+            "Mateu\\Guzzlecache\\": "src/"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^7.0",
+        "guzzlehttp/psr7": "^2.2.1",
+        "kevinrob/guzzle-cache-middleware": "^4.0.1",
+        "doctrine/common": "^3.3.0",
+        "doctrine/cache": "^2.1.1"
+    }
+}
