@@ -2,25 +2,17 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use GuzzleHttp\Client;
-use GuzzleHttp\HandlerStack;
-use Kevinrob\GuzzleCache\CacheMiddleware;
-use Doctrine\Common\Cache\FilesystemCache;
-use Kevinrob\GuzzleCache\Strategy\PrivateCacheStrategy;
-use Kevinrob\GuzzleCache\Storage\DoctrineCacheStorage;
 
-$stack = HandlerStack::create();
-$stack->push(
-    new CacheMiddleware(
-        new PrivateCacheStrategy(
-            new DoctrineCacheStorage(
-                new FilesystemCache('/cache/')
-            )
-        )
-    ),
-    'cache'
-);
+$cache = new Sarahman\SimpleCache\FileSystemCache("./cache/");
 
-$client = new Client(['handler' => $stack]);
+$client = new Client();
 
-$res = $client->request('GET', 'http://localhost:3000/posts');
-echo $res->getBody()->getContents();
+if ($cache->has('posts')) {
+    $posts = json_decode($cache->get('posts'));
+} else {
+    $response = $client->request('GET', 'http://localhost:3000/posts');
+    $posts = json_decode($response->getBody()->getContents());
+    $cache->set('posts', json_encode($posts), 90);
+}
+
+var_dump($posts);
